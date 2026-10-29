@@ -1,4 +1,0 @@
-policy,mean_fpr_percent,mean_unconditional_recall_percent,mean_leak_withheld_percent
-Transferred threshold,50.0,61.09251899881475,0.0
-Normal-reference calibration,13.556612091704931,99.38646029422019,0.0
-Calibration + 3% support guard,9.97427137038487,52.55671531352824,46.82974498069194
