@@ -1,0 +1,32 @@
+{
+  "version": "0.14.0",
+  "channels": 312,
+  "spectral_fits": 2808,
+  "reviewed_fits": 118,
+  "grid_size": 31,
+  "selected_alpha": 0.001,
+  "phantom_relative_l2_error": 0.2922942451473617,
+  "geometry": {
+    "span_deg": 50,
+    "rotation_deg": 90,
+    "status": "user_selected_legacy50_ccw",
+    "stage_positions_mm": [
+      [
+        260,
+        0
+      ],
+      [
+        0,
+        260
+      ],
+      [
+        -260,
+        0
+      ],
+      [
+        0,
+        -260
+      ]
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="합성 OES 상태 교란과 상관 잡음의 영향을 고정 모델의 결과로 비교하는 PlasmaSense 연구 데모"><title>PlasmaSense OES 실험실</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header class="top"><a class="brand" href="#">PlasmaSense<span>OES 실험실</span></a><a href="semiconductor.html">Portfolio</a><a href="lab-en.html">English</a><a href="#evidence" class="quiet">근거와 한계</a></header>
+<main>
+<section class="intro"><p class="eyebrow">물리 합성 데이터 연구 데모</p><h1>신호 변화와 경보를<br>함께 보기</h1><p class="lead">상태와 잡음을 선택하고, 네 모델이 같은 OES 신호를 어떻게 판정하는지 확인하세요.</p><p class="scope">하나의 Ar 측정 기준점에서 만든 합성 사례입니다. 저장된 고정 모델 결과를 재생하며 실제 장비 고장 성능을 뜻하지 않습니다.</p></section>
+<div class="presets" aria-label="빠른 예시"><span>세 가지 예시</span><button data-preset="normal">1. 정상 신호</button><button data-preset="drift">2. 약한 상태 교란</button><button data-preset="correlated">3. 정상에 상관 잡음</button></div>
+<noscript><p class="error">데모를 사용하려면 JavaScript를 활성화하세요.</p></noscript>
+<div id="loading" role="status">고정 모델 사례를 불러오는 중입니다.</div>
+<section class="lab" id="lab" hidden>
+<aside class="controls" aria-label="합성 조건 선택">
+<h2>조건 선택</h2>
+<div class="field"><label for="family">상태 교란</label><select id="family"><option value="nominal">정상 상태</option><option value="temperature">전자 에너지 교란</option><option value="density">전체 밀도 교란</option><option value="localized_density">국소 밀도 교란</option></select></div>
+<div class="field"><label for="regime">교란 강도</label><select id="regime"><option value="mild_unseen">약한 교란</option><option value="strong_unseen">강한 교란</option></select><small id="severity-note">정상 상태에서는 적용하지 않습니다.</small></div>
+<div class="field"><label for="noise">채널 잡음 구조</label><select id="noise"><option value="iid:0">독립 잡음</option><option value="stage_line:0.5">stage 내 공통 ρ = 0.5</option><option value="global_line:0.5">전체 채널 공통 ρ = 0.5</option><option value="global_line:0.9">전체 채널 공통 ρ = 0.9</option></select><small>공통 잡음은 같은 발광선의 채널끼리 공유합니다.</small></div>
+<div class="field"><label for="sigma">잡음 크기 σ</label><select id="sigma"><option value="0.01">0.01</option><option value="0.03">0.03</option></select><small>채널별 로그 잡음의 표준편차입니다.</small></div>
+<details class="advanced"><summary>모델 가정과 사례 선택</summary>
+<div class="field"><label for="variant">물리 응답 가정</label><select id="variant"><option value="maxwell_fixed">기준 Maxwell 모델</option><option value="generalized_eedf_1p2">EEDF 형태 변화</option><option value="relative_escape_response">상대 자기흡수 응답</option></select></div>
+<div class="field"><label for="seed">합성 시드</label><select id="seed"><option>20261010</option><option>20261011</option><option>20261012</option><option>20261013</option><option>20261014</option></select></div>
+<div class="field"><label for="repeat">반복 사례</label><select id="repeat"><option value="0">사례 1</option><option value="1">사례 2</option><option value="2">사례 3</option></select></div>
+</details>
+<p class="fixed">모델과 정상 보정 점수는 모든 잡음 조건에서 고정합니다. 평가 라벨은 판정에 사용하지 않습니다.</p>
+</aside>
+<div class="workspace">
+<section class="case-header" aria-live="polite" aria-atomic="true"><div><p class="eyebrow">선택한 한 사례</p><h2 id="case-title"></h2><p id="case-caption"></p></div><button class="download" id="download">이 사례 내려받기</button></section>
+<section class="plot"><div class="plot-head"><h3>8개 Ar 발광선의 변화</h3><span class="unit">기준 신호 대비 변화 %</span></div><div class="legend"><span class="clean">채널 잡음 적용 전</span><span class="observed">채널 잡음 적용 후</span></div><div id="lines-chart"></div><p class="chart-note">312개 채널에서 발광선별 상대 신호를 평균했습니다. 연속 스펙트럼이나 절대 방출 세기가 아닙니다.</p></section>
+<section class="plot"><div class="plot-head"><h3>750.38 nm의 채널별 변화</h3><span class="unit">기준 신호 대비 변화 %</span></div><div id="projection-chart"></div><p class="chart-note">4개 stage에서 각 13개 채널을 표시합니다. 공간 발광 지도의 직접 측정값이 아닌 투영 신호입니다.</p></section>
+<section class="model-results"><div class="plot-head"><h3>네 모델의 판정과 전체 평가 성능</h3></div><p class="table-note">판정은 선택한 한 사례입니다. 성능은 같은 조건의 전체 평가 부모 20개에서 집계한 5개 시드 평균이며, 괄호는 시드 최소–최대입니다.</p><div class="table-scroll"><table><thead><tr><th scope="col">모델</th><th scope="col">이 사례의 판정</th><th scope="col">정상 오경보율</th><th scope="col" id="recall-heading">선택 교란 재현율</th></tr></thead><tbody id="models"></tbody></table></div><p id="interpretation" class="interpretation"></p></section>
+</div></section>
+<section class="evidence" id="measured"><p class="eyebrow">별도의 공개 실측 평가</p><h2>높은 AUC만으로 경보를 믿을 수 있을까요?</h2><p>공개 N₂ 제어 누설 데이터의 채널 127 분류기는 평균 AUC 0.9989였지만, 다른 세션의 임계값을 이전하면 평균 오경보가 50%였습니다. 데이터셋 라벨상 정상인 초기 512프레임으로 보정한 뒤, 동일 미래 프레임의 오경보는 13.56%, 누설 재현율은 99.39%였습니다.</p><p>세 세션을 재사용한 기술 통계입니다. 누설과 밸브·시간 효과의 인과 분리는 미확인입니다. 이 화면의 합성 Ar 사례와 별도의 평가이며 서로의 검증을 대신하지 않습니다.</p><p>Yoonseo Lee의 작업: 312개 채널의 CT-OES 적용과 진단 분석을 바탕으로 입력 순서·분광 QC·기하학 가정을 정리하고, 물리 합성 교란 및 그룹 분할 기반 PCA/SVM 비교를 개발했습니다. 모델을 고정한 상관 잡음 평가, 공개 실측 데이터의 정상 기준 보정, 누설 보류 비용과 최종 경보 정책을 분석하고 재현 자료·데모로 연결했습니다. 확장 구현에는 AI 지원을 활용했으며 기존 CT 엔진의 발명을 주장하지 않습니다.</p><p><a href="Yoonseo_Lee_Semiconductor_Portfolio.pdf">Semiconductor portfolio PDF</a> · <a href="Yoonseo_Lee_Semiconductor_Portfolio.pdf">Semiconductor portfolio PDF</a> · <a href="https://doi.org/10.17632/9gy9v3h4mp.1" target="_blank" rel="noopener">공개 실측 데이터 출처 (CC BY 4.0)</a></p></section><section class="evidence" id="evidence"><p class="eyebrow">어디까지 검증했는가</p><h2>성공 사례와 실패 조건을 함께 남겼습니다</h2><div class="evidence-grid"><div><h3>고정한 비교</h3><p>각 시드의 fitted 모델과 정상 보정 점수를 재사용합니다. 보정 순위 꼬리값이 0.05 이하일 때 경보를 냅니다. 잡음 결과를 보고 임계값을 바꾸지 않았습니다.</p><p>예시 화면은 각 물리 응답 변형의 첫 번째 평가 부모와 모든 반복 사례를 사용합니다. 경보 결과로 사례를 선별하지 않았습니다.</p></div><div><h3>주장의 범위</h3><p>전자 에너지와 상대 밀도를 직접 교란한 축약 Ar 모델입니다. 실제 fab 고장, 절대 ne, 압력·파워·가스비 입력 예측은 검증하지 않았습니다.</p><p>시드들은 같은 측정 기준점을 공유합니다. 통계적 신뢰구간이나 독립 실험 5회로 해석하지 않습니다.</p></div></div><details><summary>신호와 모델 점수 읽는 방법</summary><p>채널 잡음 적용 전 신호에도 기존 합성 실험의 작은 상태·공간·광학 이득 변동이 남아 있습니다. 기준 대비 신호 변화만으로 고장 원인을 확정할 수 없습니다.</p><p>PCA 거리와 SVM margin은 서로 다른 점수입니다. 화면에는 비교 가능한 경보 규칙인 정상 보정 순위 꼬리값을 표시합니다. 이 값은 고장 확률이 아닙니다. “경보 없음”도 정상 확인을 뜻하지 않습니다.</p><p>EEDF 형태 변화의 에너지 매개변수는 Te로 읽지 않습니다. 자기흡수 응답은 고정 수명하의 감도 평가이며 완전한 방사 수송 모델이 아닙니다.</p></details></section>
+<footer>PlasmaSense 공개 연구 데모 · 2026-10-25 <span>기존 CT 연구 코드와 실험 자료를 기반으로 확장했습니다.</span></footer>
+</main><script src="data.js"></script><script type="module" src="app.mjs"></script></body></html>
